@@ -31,8 +31,8 @@ def run_plasma():
         t += 0.05
 
         # --- プラズマ計算 (NumPyで高速演算) ---
-        v = np.sin(xv * 10.0 + t)        # 縦波
-        v += np.sin(10.0 * (xv * np.sin(t / 2.0) + yv * np.cos(t / 3.0)) + t)   # 横
+        v = np.sin(xv * 10.0 + t)        # 横波
+        v += np.sin(10.0 * (xv * np.sin(t / 2.0) + yv * np.cos(t / 3.0)) + t)   # 縦＋斜
         cx = xv + 0.5 * np.sin(t / 5.0)
         cy = yv + 0.5 * np.cos(t / 3.0)
         v += np.sin(np.sqrt(100.0 * (cx**2 + cy**2) + 1.0) + t)  # 円状
