@@ -22,6 +22,7 @@ def run_plasma():
 
     running = True
     t = 0.0
+    flag = [True]*3
 
     while running:
         for event in pygame.event.get():
@@ -30,15 +31,24 @@ def run_plasma():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                if (event.key == pygame.K_1 or 
+                    event.key == pygame.K_2 or event.key == pygame.K_3):
+                    idx = event.key - pygame.K_1
+                    flag[idx] ^= True
+                    print(flag)
 
         t += 0.05
 
+        v = np.zeros((HEIGHT,WIDTH))
         # --- プラズマ計算 (NumPyで高速演算) ---
-        v = np.sin(xv * 10.0 + t)        # 横波
-        v += np.sin(10.0 * (xv * np.sin(t / 2.0) + yv * np.cos(t / 3.0)) + t)   # 縦＋斜
-        cx = xv + 0.5 * np.sin(t / 5.0)
-        cy = yv + 0.5 * np.cos(t / 3.0)
-        v += np.sin(np.sqrt(100.0 * (cx**2 + cy**2) + 1.0) + t)  # 円状
+        if flag[0]:
+            v += np.sin(xv * 10.0 + t)        # 横波
+        if flag[1]:
+            v += np.sin(10.0 * (xv * np.sin(t / 2.0) + yv * np.cos(t / 3.0)) + t)   # 縦＋斜
+        if flag[2]:
+            cx = xv + 0.5 * np.sin(t / 5.0)
+            cy = yv + 0.5 * np.cos(t / 3.0)
+            v += np.sin(np.sqrt(100.0 * (cx**2 + cy**2) + 1.0) + t)  # 円状
 
         # 正規化&色変換
         r = (np.sin(v * np.pi) * 127 + 128).astype(np.uint8)
